@@ -1,0 +1,3 @@
+com\tanhua\dubbo\server\api\QuanziApiImpl.class
+com\tanhua\dubbo\server\api\RecommendUserApiImpl.class
+com\tanhua\dubbo\server\DubboApplication.class
