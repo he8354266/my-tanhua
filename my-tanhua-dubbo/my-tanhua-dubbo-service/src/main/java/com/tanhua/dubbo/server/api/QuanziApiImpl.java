@@ -1,10 +1,7 @@
 package com.tanhua.dubbo.server.api;
 
 import com.alibaba.dubbo.config.annotation.Service;
-import com.tanhua.dubbo.server.pojo.Album;
-import com.tanhua.dubbo.server.pojo.Publish;
-import com.tanhua.dubbo.server.pojo.TimeLine;
-import com.tanhua.dubbo.server.pojo.Users;
+import com.tanhua.dubbo.server.pojo.*;
 import com.tanhua.dubbo.server.vo.PageInfo;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,5 +96,67 @@ public class QuanziApiImpl implements QuanZiApi {
         pageInfo.setRecords(publishList);
 
         return pageInfo;
+    }
+
+    @Override
+    public boolean saveLikeComment(Long userId, String publishId) {
+        //判断是否已经点赞，如果已经点赞就返回
+        Criteria criteria = Criteria.where("userId").is(userId)
+                .and("publishId").is(publishId)
+                .and("commentType").is(1);
+        Query query = Query.query(criteria);
+        long count = this.mongoTemplate.count(query, Comment.class);
+        if (count > 0) {
+            return false;
+        }
+
+        return this.saveComment(userId, publishId, 1, null);
+    }
+
+    @Override
+    public boolean removeComment(Long userId, String publishId, Integer commentType) {
+        return false;
+    }
+
+    @Override
+    public boolean saveLoveComment(Long userId, String publishId) {
+        return false;
+    }
+
+    @Override
+    public boolean saveComment(Long userId, String publishId, Integer type, String content) {
+        try {
+            Comment comment = new Comment();
+            comment.setContent(content);
+            comment.setIsParent(true);
+            comment.setCommentType(type);
+            comment.setPublishId(publishId);
+            comment.setUserId(userId);
+            comment.setId(ObjectId.get());
+            comment.setCreated(System.currentTimeMillis());
+
+            this.mongoTemplate.save(comment);
+
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    @Override
+    public Long queryCommentCount(String publishId, Integer type) {
+        return null;
+    }
+
+    @Override
+    public Publish queryPublishById(String publishId) {
+        return null;
+    }
+
+    @Override
+    public PageInfo<Comment> queryCommentList(String publishId, Integer page, Integer pageSize) {
+        return null;
     }
 }

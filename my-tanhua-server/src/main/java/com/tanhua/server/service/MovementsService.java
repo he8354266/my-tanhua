@@ -75,50 +75,38 @@ public class MovementsService {
 
     private PageResult queryPublishList(User user, Integer page, Integer pageSize) {
         PageResult pageResult = new PageResult();
-        Long userId = null;
+        Long userId = null; //默认查询推荐动态
         if (user != null) {
+            // 查询好友动态
             userId = user.getId();
         }
-        PageInfo<Publish> pageInfo = quanZiApi.queryPublishList(userId, page, pageSize);
-        System.out.println(pageInfo);
+
+        PageInfo<Publish> pageInfo = this.quanZiApi.queryPublishList(userId, page, pageSize);
+
+        user = UserThreadLocal.get(); //查询完成后，依然还是需要获取到当前的登录用户
+
         pageResult.setCounts(0);
         pageResult.setPages(0);
         pageResult.setPagesize(pageSize);
         pageResult.setPage(page);
 
         List<Publish> records = pageInfo.getRecords();
-        if (records.size() <= 0) {
+
+        if (CollectionUtils.isEmpty(records)) {
+            // 没有查询到动态数据
             return pageResult;
         }
 
-        List<Movements> movementsList = new ArrayList<>();
-        List<Long> userIds = new ArrayList<>();
-        for (Publish record : records) {
-            Movements movements = new Movements();
-            movements.setId(record.getId().toHexString());
-            System.out.println(movements);
-            if (!userIds.contains(record.getUserId())) {
-                userIds.add(record.getUserId());
-            }
-            movements.setLoveCount(100); //喜欢数
-            movements.setLikeCount(80);//点赞数
-            movements.setDistance("1.2公里"); //TODO 距离
-            movements.setHasLoved(1); //TODO 是否喜欢
-            movements.setHasLiked(0); //TODO 是否点赞
-            movements.setCommentCount(30); //TODO 评论数
-            movements.setCreateDate(RelativeDateFormat.format(new Date(record.getCreated()))); //发布时间，10分钟前
-            movements.setTextContent(record.getText());
-            movements.setImageContent(record.getMedias().toArray(new String[]{}));
-            movementsList.add(movements);
-        }
-        QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
-        userInfoQueryWrapper.in("user_id", userIds);
-        List<UserInfo> userInfoList = userInfoService.queryUserInfoList(userInfoQueryWrapper);
+//        pageResult.setItems(this.fillValueToMovements(records));
 
-        for(Movements movements:movementsList){
-            for()
-        }
-        return null;
+        return pageResult;
     }
 
+    public PageResult queryRecommendPublishList(Integer page, Integer pageSize) {
+        return this.queryPublishList(null, page, pageSize);
+    }
+
+    public PageResult queryUserPublishList(Integer page, Integer pageSize) {
+        return this.queryPublishList(UserThreadLocal.get(), page, pageSize);
+    }
 }
