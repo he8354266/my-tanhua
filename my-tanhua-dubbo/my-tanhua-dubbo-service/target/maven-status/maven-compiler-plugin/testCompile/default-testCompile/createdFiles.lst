@@ -1,0 +1,4 @@
+com\tanhua\dubbo\server\api\TestQuanzi.class
+com\tanhua\dubbo\server\api\TestVideo.class
+com\tanhua\dubbo\server\api\TestUsers.class
+com\tanhua\dubbo\server\api\TestRecommendUserApi.class

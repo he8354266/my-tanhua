@@ -1,5 +1,6 @@
 package com.tanhua.dubbo.server.api;
 
+import com.tanhua.dubbo.server.pojo.Comment;
 import com.tanhua.dubbo.server.pojo.Publish;
 import com.tanhua.dubbo.server.pojo.TimeLine;
 import com.tanhua.dubbo.server.vo.PageInfo;
@@ -29,6 +30,17 @@ public class TestQuanzi {
         quanZiApi.saveLikeComment(6l,"1");
     }
 
-
-
+@Test
+    public void testSaveLoveComment(){
+        quanZiApi.saveLoveComment(7l,"4");
+}
+@Test
+    public void testRemoveComment(){
+        quanZiApi.removeComment(7l,"4",3);
+}
+@Test
+    public void testQueryCommentList(){
+    PageInfo<Comment> commentPageInfo =   quanZiApi.queryCommentList("4",1,10);
+    System.out.println(commentPageInfo);
+    }
 }

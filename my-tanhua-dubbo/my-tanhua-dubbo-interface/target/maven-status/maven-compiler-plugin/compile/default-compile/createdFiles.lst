@@ -1,4 +1,6 @@
 com\tanhua\dubbo\server\pojo\Users.class
+com\tanhua\dubbo\server\api\VideoApi.class
+com\tanhua\dubbo\server\pojo\Video.class
 com\tanhua\dubbo\server\pojo\RecommendUser.class
 com\tanhua\dubbo\server\vo\PageInfo.class
 com\tanhua\dubbo\server\api\QuanZiApi.class

@@ -17,6 +17,7 @@ public class UserInfoService {
     /**
      * 查询数据库，查找用户的信息数据
      * 说明：为了简单处理，直接查询数据库了，建议：编写dubbo服务，进行调用
+     *
      * @param id
      * @return
      */

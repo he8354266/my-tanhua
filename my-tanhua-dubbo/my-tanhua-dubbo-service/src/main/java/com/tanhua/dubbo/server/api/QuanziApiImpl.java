@@ -1,6 +1,8 @@
 package com.tanhua.dubbo.server.api;
 
 import com.alibaba.dubbo.config.annotation.Service;
+import com.mongodb.bulk.DeleteRequest;
+import com.mongodb.client.result.DeleteResult;
 import com.tanhua.dubbo.server.pojo.*;
 import com.tanhua.dubbo.server.vo.PageInfo;
 import org.bson.types.ObjectId;
@@ -109,18 +111,31 @@ public class QuanziApiImpl implements QuanZiApi {
         if (count > 0) {
             return false;
         }
-
         return this.saveComment(userId, publishId, 1, null);
     }
 
     @Override
     public boolean removeComment(Long userId, String publishId, Integer commentType) {
-        return false;
+
+        Criteria criteria = Criteria.where("userId").is(userId)
+                .and("publishId").is(publishId)
+                .and("commentType").is(commentType);
+        Query query = Query.query(criteria);
+        DeleteResult deleteRequest = mongoTemplate.remove(query, Comment.class);
+        return deleteRequest.getDeletedCount() > 0;
     }
 
     @Override
     public boolean saveLoveComment(Long userId, String publishId) {
-        return false;
+        Criteria criteria = Criteria.where("userId").is(userId)
+                .and("publishId").is(publishId)
+                .and("commentType").is(3);
+        Query query = Query.query(criteria);
+        long count = mongoTemplate.count(query, Comment.class);
+        if (count > 0) {
+            return false;
+        }
+        return saveComment(userId, publishId, 3, null);
     }
 
     @Override
@@ -134,7 +149,6 @@ public class QuanziApiImpl implements QuanZiApi {
             comment.setUserId(userId);
             comment.setId(ObjectId.get());
             comment.setCreated(System.currentTimeMillis());
-
             this.mongoTemplate.save(comment);
 
             return true;
@@ -147,16 +161,31 @@ public class QuanziApiImpl implements QuanZiApi {
 
     @Override
     public Long queryCommentCount(String publishId, Integer type) {
-        return null;
+
+        Criteria criteria = Criteria.where("publishId").is(publishId)
+                .and("commentType").is(type);
+        Query query = Query.query(criteria);
+        long count = mongoTemplate.count(query, Comment.class);
+        return count;
     }
 
     @Override
     public Publish queryPublishById(String publishId) {
-        return null;
+        return mongoTemplate.findById(publishId, Publish.class);
     }
 
     @Override
     public PageInfo<Comment> queryCommentList(String publishId, Integer page, Integer pageSize) {
-        return null;
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Order.asc("created")));
+        Criteria criteria = Criteria.where("publishId").is(publishId)
+                .and("commentType").is(2);
+        Query query = Query.query(criteria).with(pageRequest);
+        List<Comment> commentList = mongoTemplate.find(query, Comment.class);
+        PageInfo pageInfo = new PageInfo();
+        pageInfo.setPageSize(pageSize);
+        pageInfo.setTotal(0);
+        pageInfo.setPageNum(page);
+        pageInfo.setRecords(commentList);
+        return pageInfo;
     }
 }
