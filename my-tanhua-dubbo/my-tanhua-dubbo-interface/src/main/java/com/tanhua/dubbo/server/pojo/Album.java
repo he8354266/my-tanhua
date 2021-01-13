@@ -22,7 +22,7 @@ public class Album implements Serializable {
 
     private ObjectId id;//主键id
 
-    private ObjectId publishId; //发布id
+    private String publishId; //发布id
     private Long created; //发布时间
 
 }

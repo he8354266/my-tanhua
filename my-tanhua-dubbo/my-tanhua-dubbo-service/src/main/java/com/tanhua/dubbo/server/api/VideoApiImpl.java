@@ -29,7 +29,7 @@ public class VideoApiImpl implements VideoApi {
         if (video.getUserId() == null) {
             return false;
         }
-        video.setId(ObjectId.get());
+//        video.setId(ObjectId.get());
         video.setCreated(System.currentTimeMillis());
         mongoTemplate.save(video);
         return true;

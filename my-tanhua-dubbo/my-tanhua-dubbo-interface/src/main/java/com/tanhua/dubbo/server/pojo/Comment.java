@@ -13,11 +13,11 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(collection = "quanzi_comment")
-public class Comment implements java.io.Serializable{
+public class Comment implements java.io.Serializable {
 
     private static final long serialVersionUID = -291788258125767614L;
 
-    private ObjectId id;
+    private String id;
 
     private String publishId; //发布id
     private Integer commentType; //评论类型，1-点赞，2-评论，3-喜欢

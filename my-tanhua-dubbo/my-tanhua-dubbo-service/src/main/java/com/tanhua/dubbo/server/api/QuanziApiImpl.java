@@ -35,7 +35,7 @@ public class QuanziApiImpl implements QuanZiApi {
         }
 
         try {
-            publish.setId(ObjectId.get());
+           publish.setId(String.valueOf(ObjectId.get()));
             publish.setCreated(System.currentTimeMillis()); //发布时间
             publish.setSeeType(1); //查看权限
 
@@ -57,7 +57,7 @@ public class QuanziApiImpl implements QuanZiApi {
                 TimeLine timeLine = new TimeLine();
                 timeLine.setId(ObjectId.get());
                 timeLine.setUserId(publish.getUserId());
-                timeLine.setPublishId(publish.getId());
+//                timeLine.setPublishId(publish.getId());
                 timeLine.setDate(System.currentTimeMillis());
                 mongoTemplate.save(timeLine, "quanzi_time_line_" + user.getFriendId());
             }

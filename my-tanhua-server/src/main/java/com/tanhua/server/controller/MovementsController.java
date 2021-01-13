@@ -82,4 +82,96 @@ public class MovementsController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
+    /**
+     * 点赞
+     *
+     * @param publishId
+     * @return
+     */
+    @GetMapping("/{id}/like")
+    public ResponseEntity<Long> likeComment(@PathVariable("id") String publishId) {
+        Long count = movementsService.likeComment(publishId);
+        if (count != null) {
+            return ResponseEntity.ok(count);
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    /**
+     * 取消点赞
+     *
+     * @param publishId
+     * @return
+     */
+    @GetMapping("/{id}/dislike")
+    public ResponseEntity<Long> disLikeComment(@PathVariable("id") String publishId) {
+        try {
+            Long count = movementsService.disLikeComment(publishId);
+            if (count != null) {
+                return ResponseEntity.ok(count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    /**
+     * 喜欢
+     *
+     * @param publishId
+     * @return
+     */
+    @GetMapping("/{id}/love")
+    public ResponseEntity<Long> loveComment(@PathVariable("id") String publishId) {
+        try {
+            Long count = this.movementsService.loveComment(publishId);
+            if (null != count) {
+                return ResponseEntity.ok(count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    /**
+     * 取消喜欢
+     *
+     * @param publishId
+     * @return
+     */
+    @GetMapping("/{id}/unlove")
+    public ResponseEntity<Long> unLoveComment(@PathVariable("id") String publishId) {
+        try {
+            Long count = this.movementsService.unLoveComment(publishId);
+            if (null != count) {
+                return ResponseEntity.ok(count);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    /**
+     * 查询单条动态信息
+     *
+     * @param publishId
+     * @return
+     */
+    @GetMapping("{id}")
+    public ResponseEntity<Movements> queryMovementsById(@PathVariable("id") String publishId) {
+        try {
+            Movements movements = movementsService.queryMovementsById(publishId);
+            if (movements != null) {
+                return ResponseEntity.ok(movements);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+
+
+    }
 }
