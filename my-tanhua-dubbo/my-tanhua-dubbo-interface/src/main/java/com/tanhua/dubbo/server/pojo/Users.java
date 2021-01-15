@@ -21,6 +21,6 @@ public class Users implements java.io.Serializable{
     private ObjectId id;
     private Long userId; //用户id
     private Long friendId; //好友id
-    private Date date; //时间
+    private Long date; //时间
 
 }

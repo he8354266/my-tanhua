@@ -1,6 +1,7 @@
 package com.tanhua.dubbo.server.api;
 
 import com.tanhua.dubbo.server.pojo.Users;
+import com.tanhua.dubbo.server.vo.PageInfo;
 import org.bson.types.ObjectId;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,23 +21,24 @@ public class TestUsers {
 
     @Autowired
     private MongoTemplate mongoTemplate;
+    @Autowired
+    private UsersApi usersApi;
 
     @Test
-    public void saveUsers(){
-        this.mongoTemplate.save(new Users(ObjectId.get(),1L, 2L, new Date()));
-        this.mongoTemplate.save(new Users(ObjectId.get(),1L, 3L, new Date()));
-        this.mongoTemplate.save(new Users(ObjectId.get(),1L, 4L, new Date()));
-        this.mongoTemplate.save(new Users(ObjectId.get(),1L, 5L, new Date()));
-        this.mongoTemplate.save(new Users(ObjectId.get(),1L, 6L, new Date()));
+    public void saveUsers() {
+        Users users = new Users();
+        users.setUserId(1l);
+        users.setFriendId(11l);
+        String result = usersApi.saveUsers(users);
+        System.out.println(result);
     }
 
     @Test
-    public void testQueryList(){
-        Criteria criteria = Criteria.where("userId").is(1L);
-        List<Users> users = this.mongoTemplate.find(Query.query(criteria), Users.class);
-        for (Users user : users) {
-            System.out.println(user);
-        }
+    public void queryAllUsersList() {
+
+        PageInfo<Users> pageInfo = usersApi.queryUsersList(1l, 1, 10);
+        System.out.println(pageInfo);
     }
+
 }
                        

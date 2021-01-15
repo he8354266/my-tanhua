@@ -1,0 +1,37 @@
+package com.tanhua.dubbo.server.api;
+
+import com.tanhua.dubbo.server.pojo.Users;
+import com.tanhua.dubbo.server.vo.PageInfo;
+
+import java.util.List;
+
+/**
+ * @Title: project
+ * @Package * @Description:     * @author CodingSir
+ * @date 2021/1/1317:31
+ */
+public interface UsersApi {
+    /**
+     * 保存好友
+     *
+     * @param users
+     * @return
+     */
+    String saveUsers(Users users);
+
+    /**
+     * 根据用户id查询Users列表
+     *
+     * @param userId
+     * @return
+     */
+    List<Users> queryAllUsersList(Long userId);
+
+    /**
+     * 根据用户id查询Users列表(分页查询)
+     *
+     * @param userId
+     * @return
+     */
+    PageInfo<Users> queryUsersList(Long userId, Integer page, Integer pageSize);
+}

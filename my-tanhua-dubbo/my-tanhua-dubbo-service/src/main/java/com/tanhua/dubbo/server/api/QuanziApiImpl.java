@@ -35,7 +35,7 @@ public class QuanziApiImpl implements QuanZiApi {
         }
 
         try {
-           publish.setId(String.valueOf(ObjectId.get()));
+            publish.setId(String.valueOf(ObjectId.get()));
             publish.setCreated(System.currentTimeMillis()); //发布时间
             publish.setSeeType(1); //查看权限
 
@@ -147,7 +147,7 @@ public class QuanziApiImpl implements QuanZiApi {
             comment.setCommentType(type);
             comment.setPublishId(publishId);
             comment.setUserId(userId);
-            comment.setId(ObjectId.get());
+//            comment.setId(ObjectId.get());
             comment.setCreated(System.currentTimeMillis());
             this.mongoTemplate.save(comment);
 
@@ -186,6 +186,25 @@ public class QuanziApiImpl implements QuanZiApi {
         pageInfo.setTotal(0);
         pageInfo.setPageNum(page);
         pageInfo.setRecords(commentList);
+        return pageInfo;
+    }
+
+    @Override
+    public List<Publish> queryPublishByPids(List<Long> pids) {
+        Query query = Query.query(Criteria.where("pid").in(pids));
+        return mongoTemplate.find(query, Publish.class);
+    }
+
+    @Override
+    public PageInfo<Comment> queryCommentListByUser(Long userId, Integer type, Integer page, Integer pageSize) {
+        PageRequest pageRequest = PageRequest.of(page - 1, pageSize, Sort.by(Sort.Order.desc("created")));
+        Query query = Query.query(Criteria.where("publishUserId").is(userId).and("commentType").is(type)).with(pageRequest);
+        List<Comment> commentList = mongoTemplate.find(query, Comment.class);
+        PageInfo<Comment> pageInfo = new PageInfo<>();
+        pageInfo.setPageNum(page);
+        pageInfo.setTotal(0);
+        pageInfo.setRecords(commentList);
+        pageInfo.setPageNum(page);
         return pageInfo;
     }
 }

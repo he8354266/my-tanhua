@@ -4,6 +4,8 @@ import com.tanhua.dubbo.server.pojo.Comment;
 import com.tanhua.dubbo.server.pojo.Publish;
 import com.tanhua.dubbo.server.vo.PageInfo;
 
+import java.util.List;
+
 /**
  * @Title: project
  * @Package * @Description:     * @author CodingSir
@@ -90,5 +92,18 @@ public interface QuanZiApi {
      * @return
      */
     PageInfo<Comment> queryCommentList(String publishId, Integer page, Integer pageSize);
+    /**
+     * 根据pid批量查询数据
+     *
+     * @param pids
+     * @return
+     */
+    List<Publish> queryPublishByPids(List<Long> pids);
 
+    /**
+     * 查询用户的评论数据
+     *
+     * @return
+     */
+    PageInfo<Comment> queryCommentListByUser(Long userId, Integer type, Integer page, Integer pageSize);
 }

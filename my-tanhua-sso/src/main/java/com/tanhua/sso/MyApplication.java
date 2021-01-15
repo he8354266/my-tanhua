@@ -1,4 +1,4 @@
-package com.tanhua.sso.mapper;
+package com.tanhua.sso;
 
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +12,6 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 @MapperScan("com.tanhua.sso.mapper")
-@ComponentScan(basePackages = "com.tanhua.*")
 public class MyApplication {
     public static void main(String[] args) {
         SpringApplication.run(MyApplication.class, args);
